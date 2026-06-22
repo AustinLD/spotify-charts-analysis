@@ -1,0 +1,31 @@
+# Data files
+# Raw 3.4GB download stays local only.
+data/raw/
+# The uncompressed slim slice (~99MB) stays local; commit the gzipped copy instead.
+data/*.csv
+# (data/*.csv.gz is NOT ignored, so the committed slice is the gzipped one.)
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Claude Memory
+CLAUDE.md
+MEMORY.md
+
+# Power BI binary files
+*.pbix
