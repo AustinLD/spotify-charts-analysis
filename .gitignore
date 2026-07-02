@@ -28,4 +28,7 @@ CLAUDE.md
 MEMORY.md
 
 # Power BI binary files
-*.pbix
+# The dashboard .pbix (~12MB) IS committed so recruiters can open it directly.
+# Ignore only Power BI temp/autosave artifacts.
+*.pbix.tmp
+~$*.pbix

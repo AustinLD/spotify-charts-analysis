@@ -20,11 +20,11 @@ The analysis itself is SQL, leaning on window functions: FIRST_VALUE and MIN OVE
 
 **Streaming is heavily concentrated.** The top 1% of songs captured about 21% of all US streams, the top 5% captured more than half, and the top 10% captured roughly 73%. A small set of songs carries the platform, which is the same Pareto shape that shows up in most engagement data.
 
-**Momentum is visible before the peak.** Week-over-week rank changes surface songs that are about to break. The sharpest example is the surge around Juice WRLD's catalog in December 2019, when "Legends" jumped 195 positions in a single week.
+**The biggest weekly jumps are events, not momentum.** Ranking the largest single-week climbs into the Top 10 shows that 9 of the 12 sharpest jumps were driven by external events rather than organic build. The XXXTENTACION (June 2018) and Juice WRLD (December 2019) catalogs surged the week each artist died, and Starboy and The Hills both re-entered the days after The Weeknd's Super Bowl LV halftime show. "Legends" jumped 195 positions in a single week, the largest move in the data, the week after Juice WRLD's death. Only three of the top jumps (Something Just Like This, you should see me in a crown, Blinding Lights) came from ordinary release or organic growth.
 
 ## What I would do with this
 
-For a playlist or marketing team, the practical takeaway is to separate the two patterns early. A song debuting outside the top 50 but posting a large positive week-over-week rank change is a climber worth backing, because the data shows those climbs compound. A song that spikes high and flattens within days is usually a short event (often seasonal, like "This Is Halloween") and not worth sustained spend. Because streaming is so concentrated, even small improvements in identifying real climbers before they peak are worth more than broad support across the catalog.
+For a playlist or marketing team, the practical takeaway is to read a big week-over-week jump correctly before spending against it. Most of the largest jumps are event-driven re-entries of older catalog tracks (a death, a televised performance, a cultural moment) that spike fast and fade, so they call for quick, short-lived activation rather than a sustained campaign. Genuine organic climbers, a song debuting outside the top 50 and posting steady positive rank changes week over week without an obvious external trigger, are rarer but are the ones worth backing for the long run. Because streaming is so concentrated, telling these two patterns apart early is worth more than broad support across the catalog.
 
 ## Stack
 

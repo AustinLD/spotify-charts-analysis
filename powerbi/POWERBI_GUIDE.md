@@ -75,11 +75,33 @@ RANKX ( ALL ( Charts[song] ), [Song Total Streams],, DESC )
 - Line chart: Total Streams by `Calendar[Date]` (the upward trend).
 - Slicers: Region, Year.
 
-**Page 2: Chart dynamics**
+**Page 2: Chart dynamics** (redesigned session 15)
 
-- Histogram of run length: bucket `Avg Days on Chart` per song, or build a "days on chart" calculated column per song and chart its distribution.
-- Scatter: debut rank (x) vs peak rank (y), one point per song. Build debut/peak as calculated columns on a song summary table (see note below).
-- Table: top 25 longest-running songs with debut, peak, days on chart.
+The original histogram + debut-vs-peak scatter were hard to read: the histogram was crushed by the right-skewed run-length distribution, and the scatter formed a mathematically forced triangle (peak rank can never be worse than debut). Replaced both with banded/categorical columns that carry one clear takeaway each.
+
+- Tenure column chart ("How long songs stay on the chart"): clustered column, X = `Song Summary[Tenure Band]` (sorted by `Tenure Band Sort`), Y = Count of song, data labels on (white). The 6 bands: 1 week or less, 1-4 weeks, 1-3 months, 3-6 months, 6-12 months, 1 year+. Reads 55.2% gone within a week.
+- Debut-outcome column chart ("Most songs peak the week they debut"): clustered column, X = `Song Summary[Debut Outcome]`, Y = `[Pct of Songs]`, data labels on (white, %). Shows 66.9% debut at peak vs 33.1% climb higher.
+- Table ("Top 15 longest-running songs"): song, Debut Rank, Peak Rank, Days On Chart. Top 15 filter by Days On Chart. Days On Chart set to Sum (each song is one row, so values are unchanged) so green conditional-formatting data bars can be enabled; header renamed back to "Days On Chart". Sorted descending.
+
+Supporting model objects (all on the `Song Summary` table, see note below):
+
+```DAX
+Tenure Band =
+VAR d = 'Song Summary'[Days On Chart]
+RETURN SWITCH ( TRUE (),
+    d <= 7, "1 week or less", d <= 28, "1-4 weeks", d <= 91, "1-3 months",
+    d <= 182, "3-6 months", d <= 365, "6-12 months", "1 year+" )
+
+Tenure Band Sort =
+VAR d = 'Song Summary'[Days On Chart]
+RETURN SWITCH ( TRUE (), d <= 7, 1, d <= 28, 2, d <= 91, 3, d <= 182, 4, d <= 365, 5, 6 )
+
+Debut Outcome =
+IF ( 'Song Summary'[Peak Rank] = 'Song Summary'[Debut Rank], "Debuted at peak", "Climbed higher" )
+
+Song Count = COUNTROWS ( 'Song Summary' )
+Pct of Songs = DIVIDE ( COUNTROWS ( 'Song Summary' ), CALCULATE ( COUNTROWS ( 'Song Summary' ), REMOVEFILTERS ( 'Song Summary' ) ) )
+```
 
 **Page 3: Concentration**
 
@@ -87,11 +109,12 @@ RANKX ( ALL ( Charts[song] ), [Song Total Streams],, DESC )
 - Card callouts: share held by the top 1%, 5%, 10% of songs.
 - Bar chart: top 15 songs by total streams.
 
-**Page 4: Momentum**
+**Page 4: Climbers** (redesigned session 16)
 
-- Table sorted by week-over-week positions gained, with a rank-change calculated column (see note).
-- Line chart: pick two or three songs (a climber and a spike) and plot `Best Rank` over time, with the rank axis reversed so 1 is on top.
-- Slicer: date range.
+The original two-song trajectory line chart was noisy: it drew fake bridges across off-chart gaps and its example "catalog climber" actually decayed. Replaced with a single ranked bar of the biggest real climbs, which is what `02_rank_momentum.sql` computes and yields an honest finding.
+
+- Ranked horizontal bar of the 12 biggest single-week climbs into the Top 10, colored green for external-event spikes and gray for organic climbs, with the driving event in the tooltip. Backed by a "Top Climbs" DATATABLE calc table (refresh the model after creating it).
+- Headline: 9 of the 12 biggest jumps are event-driven re-entries (XXXTENTACION and Juice WRLD deaths, The Weeknd's Super Bowl LV), only 3 organic.
 
 ## 5. Note on song-run columns
 
@@ -115,4 +138,4 @@ Use a dark background with Spotify green (#1DB954) as the accent to match the no
 
 ## 7. Save
 
-Save the file as `powerbi/spotify-chart-dynamics.pbix`. It is gitignored (binary), so commit a screenshot or two of the finished pages into `data/` or a `screenshots/` folder for the README instead.
+Save the file as `powerbi/spotify-chart-dynamics.pbix`. The file (about 12MB) is committed to the repo so it can be opened directly, and page screenshots live in `screenshots/` for the README preview.
